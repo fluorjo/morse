@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {Button, StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Sound from 'react-native-sound';
 Sound.setCategory('Playback');
@@ -23,30 +23,20 @@ Sound.setCategory('Playback');
 //     }
 //   },
 // );
-var myRemoteSound = new Sound(
-  'toneSound.mp3',
-  Sound.MAIN_BUNDLE,
-  error => {
-    if (error) {
-      console.log('failed to load the sound', error);
-      return;
-    } else {
-      myRemoteSound.play(success => {
-        if (success) {
-          console.log('Sound playing');
-        } else {
-          console.log('Issue playing file');
-          console.log(error);
-        }
-      });
-    }
-  },
-);
+
+var myRemoteSound: any;
 export default function App() {
   const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
 
   useEffect(() => {
+    myRemoteSound = new Sound('toneSound.mp3', Sound.MAIN_BUNDLE, error => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        return;
+      }
+    });
     myRemoteSound.setVolume(1);
+
     return () => {
       myRemoteSound.release();
     };
@@ -60,7 +50,6 @@ export default function App() {
       myRemoteSound.play(success => {
         if (success) {
           setPlaying(false);
-
           console.log('Sound playing');
         } else {
           setPlaying(false);
@@ -70,10 +59,21 @@ export default function App() {
       });
     }
   };
+  const playSound = () => {
+    setPlaying(true);
+    myRemoteSound.play();
+  };
+  const pauseSound = () => {
+    setPlaying(false);
+    myRemoteSound.pause();
+
+  };
 
   return (
     <View style={styles.container}>
-      <Button title="beep" onPress={playPause} />
+      <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
+        <Text>Tone</Text>
+      </TouchableOpacity>
     </View>
   );
 }
