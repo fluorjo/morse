@@ -60,13 +60,10 @@ export default function App() {
     }
   };
   const playSound = () => {
-    setPlaying(true);
-    myRemoteSound.play();
+    myRemoteSound.setNumberOfLoops(-1).play();
   };
   const pauseSound = () => {
-    setPlaying(false);
-    myRemoteSound.pause();
-
+    myRemoteSound.stop();
   };
 
   return (
