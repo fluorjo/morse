@@ -4,9 +4,28 @@ import {Button, StyleSheet, View} from 'react-native';
 
 import Sound from 'react-native-sound';
 Sound.setCategory('Playback');
+// var myRemoteSound = new Sound(
+//   'https://www.soundjay.com/ambient/sounds/boarding-accouncement-1.mp3',
+//   null,
+//   error => {
+//     if (error) {
+//       console.log('failed to load the sound', error);
+//       return;
+//     } else {
+//       myRemoteSound.play(success => {
+//         if (success) {
+//           console.log('Sound playing');
+//         } else {
+//           console.log('Issue playing file');
+//           console.log(error);
+//         }
+//       });
+//     }
+//   },
+// );
 var myRemoteSound = new Sound(
-  'https://www.soundjay.com/ambient/sounds/boarding-accouncement-1.mp3',
-  null,
+  'toneSound.mp3',
+  Sound.MAIN_BUNDLE,
   error => {
     if (error) {
       console.log('failed to load the sound', error);
