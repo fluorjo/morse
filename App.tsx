@@ -98,8 +98,10 @@ export default function App() {
   };
 
   const startDot = () => {
-    playDot();
-    intervalRef.current = setInterval(playDot, 120); // 60ms마다 playDot 함수 반복
+    setTimeout(() => {
+      intervalRef.current = setInterval(playDot, 120); // 60ms마다 playDot 함수 반복
+      // myRemoteSound.pause();
+    }, 50);
   };
 
   const startDash = () => {
