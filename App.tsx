@@ -1,14 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Draggable from 'react-native-draggable';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Sound from 'react-native-sound';
-
+import TouchGesture from './TouchGesture';
 Sound.setCategory('Playback');
 // var myRemoteSound = new Sound(
 //   'https://www.soundjay.com/ambient/sounds/boarding-accouncement-1.mp3',
@@ -31,6 +24,7 @@ Sound.setCategory('Playback');
 // );
 
 var myRemoteSound: any;
+
 export default function App() {
   const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
   const intervalRef = useRef<any>(null); // 인터벌 참조를 저장할 ref
@@ -108,7 +102,7 @@ export default function App() {
     setTimeout(() => {
       intervalRef.current = setInterval(playDot, 120); // 60ms마다 playDot 함수 반복
       // myRemoteSound.pause();
-    }, 50);
+    }, 30);
   };
 
   const startDash = () => {
@@ -122,44 +116,57 @@ export default function App() {
   };
   return (
     <View style={styles.container}>
-      <ScrollView scrollEnabled={scrollable}>
-        <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
-          <Text>Tone</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPressIn={playDot} onPressOut={rewind}>
-          <Text>Dot</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPressIn={playDash} onPressOut={rewind}>
-          <Text>Dash</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPressIn={startDot} onPressOut={stopSound}>
-          <Text>Dot2</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPressIn={startDash} onPressOut={stopSound}>
-          <Text>Dash2</Text>
-        </TouchableOpacity>
+      <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
+        <Text>Tone</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={playDot} onPressOut={rewind}>
+        <Text>Dot</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={playDash} onPressOut={rewind}>
+        <Text>Dash</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={startDot} onPressOut={stopSound}>
+        <Text>Dot2</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={startDash} onPressOut={stopSound}>
+        <Text>Dash2</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          onPressIn={startDash}
-          onPressOut={stopSound}
-          style={{
-            backgroundColor: 'black',
-            borderRadius: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text>Dash2</Text>
-        </TouchableOpacity>
-      </ScrollView>
-      <Draggable
+      <TouchableOpacity
+        onPressIn={startDash}
+        onPressOut={stopSound}
+        style={{
+          backgroundColor: 'black',
+          borderRadius: 25,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text>Dash2</Text>
+      </TouchableOpacity>
+      <TouchGesture />
+
+      {/* <Draggable
         x={100}
-        y={100}
-        renderSize={56}
+        y={300}
+        renderSize={50}
         renderColor="black"
-        renderText="A"
+        renderText="Dot"
         isCircle
         shouldReverse
+        // onDrag={() => console.log('drag')}
+        onDrag={playDot}
+        // onDragRelease={() => console.log('red')}
+        onDragRelease={rewind}
       />
+      <Draggable
+        x={200}
+        y={300}
+        renderSize={50}
+        renderColor="red"
+        renderText="Dash"
+        isCircle
+        shouldReverse
+      /> */}
     </View>
   );
 }

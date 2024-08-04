@@ -7,3 +7,5 @@ https://youtu.be/eRvQkvSWoGU?si=5XUH7qcTF2nMpPr3
 
 모스부호 약어 등 정보
 https://www.mykit.com/kor/ele/morse.htm
+
+https://yeri-kim.github.io/posts/rn-PanResponder/
