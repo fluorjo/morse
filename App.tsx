@@ -33,10 +33,16 @@ export default function App() {
       if (error) {
         console.log('failed to load the sound', error);
         return;
+      } else {
+        console.log(
+          'duration in seconds: ' +
+            myRemoteSound.getDuration() +
+            'number of channels: ' +
+            myRemoteSound.getNumberOfChannels(),
+        );
       }
     });
     myRemoteSound.setVolume(1);
-
     return () => {
       myRemoteSound.release();
     };
@@ -60,16 +66,45 @@ export default function App() {
     }
   };
   const playSound = () => {
+    myRemoteSound.setVolume(1);
     myRemoteSound.setNumberOfLoops(-1).play();
   };
   const pauseSound = () => {
     myRemoteSound.stop();
   };
 
+  var length_of_unit = 60;
+
+  const playDot = () => {
+    myRemoteSound.setVolume(1);
+    myRemoteSound.setNumberOfLoops(-1).play();
+    setTimeout(() => {
+      myRemoteSound.setVolume(0);
+      // myRemoteSound.pause();
+    }, 60);
+  };
+
+  const playDash = () => {
+    myRemoteSound.setVolume(1);
+    myRemoteSound.setNumberOfLoops(-1).play();
+    setTimeout(() => {
+      myRemoteSound.setVolume(0);
+    }, length_of_unit * 3);
+  };
+
+  const rewind = () => {
+    myRemoteSound.setCurrentTime(1);
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
         <Text>Tone</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={playDot} onPressOut={rewind}>
+        <Text>Dot</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={playDash} onPressOut={rewind}>
+        <Text>Dash</Text>
       </TouchableOpacity>
     </View>
   );
