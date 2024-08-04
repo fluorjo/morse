@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
@@ -27,6 +27,7 @@ Sound.setCategory('Playback');
 var myRemoteSound: any;
 export default function App() {
   const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
+  const intervalRef = useRef<any>(null); // 인터벌 참조를 저장할 ref
 
   useEffect(() => {
     myRemoteSound = new Sound('toneSound.mp3', Sound.MAIN_BUNDLE, error => {
@@ -95,6 +96,21 @@ export default function App() {
   const rewind = () => {
     myRemoteSound.setCurrentTime(1);
   };
+
+  const startDot = () => {
+    playDot();
+    intervalRef.current = setInterval(playDot, 120); // 60ms마다 playDot 함수 반복
+  };
+
+  const startDash = () => {
+    playDash();
+    intervalRef.current = setInterval(playDash, length_of_unit * 4); // dot 신호의 3배 시간 간격으로 playDash 함수 반복
+  };
+
+  const stopSound = () => {
+    clearInterval(intervalRef.current); // 인터벌 중지
+    pauseSound(); // 사운드 중지
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
@@ -105,6 +121,12 @@ export default function App() {
       </TouchableOpacity>
       <TouchableOpacity onPressIn={playDash} onPressOut={rewind}>
         <Text>Dash</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={startDot} onPressOut={stopSound}>
+        <Text>Dot2</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPressIn={startDash} onPressOut={stopSound}>
+        <Text>Dash2</Text>
       </TouchableOpacity>
     </View>
   );
