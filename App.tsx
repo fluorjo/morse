@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Sound from 'react-native-sound';
 import TouchGesture from './TouchGesture';
 Sound.setCategory('Playback');
@@ -24,6 +24,8 @@ Sound.setCategory('Playback');
 // );
 
 var myRemoteSound: any;
+var WPM = 20;
+var length_of_unit = (60 / (50 * WPM)) * 1000;
 
 export default function App() {
   const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
@@ -75,16 +77,17 @@ export default function App() {
     myRemoteSound.stop();
   };
 
-  var length_of_unit = 60;
-
   const playDot = () => {
     myRemoteSound.setVolume(1);
     myRemoteSound.setNumberOfLoops(-1).play();
     setTimeout(() => {
       myRemoteSound.setVolume(0);
       // myRemoteSound.pause();
-    }, 60);
+    }, length_of_unit);
   };
+
+
+
 
   const playDash = () => {
     myRemoteSound.setVolume(1);
@@ -115,7 +118,7 @@ export default function App() {
     pauseSound(); // 사운드 중지
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
         <Text>Tone</Text>
       </TouchableOpacity>
@@ -129,10 +132,10 @@ export default function App() {
         <Text>Dot2</Text>
       </TouchableOpacity>
       <TouchableOpacity onPressIn={startDash} onPressOut={stopSound}>
-        <Text>Dash2</Text>
+        <Text>Dah2</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPressIn={startDash}
         onPressOut={stopSound}
         style={{
@@ -142,7 +145,7 @@ export default function App() {
           alignItems: 'center',
         }}>
         <Text>Dash2</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchGesture />
 
       {/* <Draggable
@@ -167,7 +170,7 @@ export default function App() {
         isCircle
         shouldReverse
       /> */}
-    </View>
+    </SafeAreaView>
   );
 }
 
