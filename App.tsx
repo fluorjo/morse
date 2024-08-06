@@ -29,6 +29,13 @@ var length_of_unit = (60 / (50 * WPM)) * 1000;
 
 export default function App() {
   const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
+  useEffect(() => {
+    if (playing) {
+      console.log('playing state changed to true');
+    } else {
+      console.log('playing state changed to false');
+    }
+  }, [playing]);
   const intervalRef = useRef<any>(null); // 인터벌 참조를 저장할 ref
   const [scrollable, setScrollable] = React.useState(true);
 
@@ -70,24 +77,35 @@ export default function App() {
     }
   };
   const playSound = () => {
-    myRemoteSound.setVolume(1);
-    myRemoteSound.setNumberOfLoops(-1).play();
+    console.log('before sound, playing=', playing);
+    if (!playing) {
+      setPlaying(true);
+      myRemoteSound.setVolume(1);
+      myRemoteSound.setNumberOfLoops(-1).play();
+      setPlaying(false);
+      console.log('play sound initiated');
+    } else {
+      null;
+    }
   };
   const pauseSound = () => {
-    myRemoteSound.stop();
+    console.log('before stop, playing=', playing);
+
+    if (!playing) {
+      myRemoteSound.setVolume(0);
+      setPlaying(false);
+      console.log('stop sound, playing=', playing);
+    } else {
+      null;
+    }
   };
 
   const playDot = () => {
-    myRemoteSound.setVolume(1);
-    myRemoteSound.setNumberOfLoops(-1).play();
+    playSound();
     setTimeout(() => {
-      myRemoteSound.setVolume(0);
-      // myRemoteSound.pause();
+      pauseSound();
     }, length_of_unit);
   };
-
-
-
 
   const playDash = () => {
     myRemoteSound.setVolume(1);
