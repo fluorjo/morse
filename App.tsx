@@ -120,20 +120,19 @@ export default function App() {
   };
 
   const startDot = () => {
-    setTimeout(() => {
-      intervalRef.current = setInterval(playDot, 120); // 60ms마다 playDot 함수 반복
-      // myRemoteSound.pause();
-    }, 30);
+    intervalRef.current = setInterval(playDot, length_of_unit + length_of_unit);
   };
 
   const startDash = () => {
     playDash();
-    intervalRef.current = setInterval(playDash, length_of_unit * 4); // dot 신호의 3배 시간 간격으로 playDash 함수 반복
+    intervalRef.current = setInterval(
+      playDash,
+      length_of_unit * 3 + length_of_unit,
+    ); // dot 신호의 3배 시간 간격으로 playDash 함수 반복
   };
 
   const stopSound = () => {
     clearInterval(intervalRef.current); // 인터벌 중지
-    pauseSound(); // 사운드 중지
   };
   const playMorse = sequence => {
     let index = 0;
