@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Button, StyleSheet, View} from 'react-native';
 import Sound from 'react-native-sound';
-import TouchGesture from './TouchGesture';
+import {WebView} from 'react-native-webview';
+
 Sound.setCategory('Playback');
 // var myRemoteSound = new Sound(
 //   'https://www.soundjay.com/ambient/sounds/boarding-accouncement-1.mp3',
@@ -135,34 +136,82 @@ export default function App() {
     clearInterval(intervalRef.current); // 인터벌 중지
     pauseSound(); // 사운드 중지
   };
-  const playMorse = sequence => {
-    let index = 0;
-    const playNext = () => {
-      if (index < sequence.length) {
-        const symbol = sequence[index];
-        index++;
-        if (symbol === '.') {
-          playDot();
-          setTimeout(playNext, length_of_unit + length_of_unit); // 60ms dot duration + 60ms space
-        } else if (symbol === '-') {
-          playDash();
-          setTimeout(playNext, length_of_unit * 3 + length_of_unit); // 180ms dash duration + 60ms space
-        } else if (symbol === ' ') {
-          setTimeout(playNext, length_of_unit * 3 - length_of_unit);
-        } else if (symbol === '/') {
-          setTimeout(playNext, length_of_unit * 7 - length_of_unit);
-          rewind();
-        } else if (symbol === '') {
-          rewind();
-        }
-      }
-    };
-    playNext();
+  const webviewRef = React.useRef(null);
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Web Audio API</title>
+      </head>
+      <body>
+        <script>
+          let context;
+          let gainNode;
+
+          function createContext() {
+            try {
+              if (!context) {
+                context = new (window.AudioContext || window.webkitAudioContext)();
+                gainNode = context.createGain();
+                window.ReactNativeWebView.postMessage('AudioContext created');
+              }
+            } catch (error) {
+              window.ReactNativeWebView.postMessage('Error creating AudioContext: ' + error.message);
+            }
+          }
+
+          function playTone() {
+            try {
+              console.log('playTone function called');
+              window.ReactNativeWebView.postMessage('playTone function called');
+              if (!context) {
+                window.ReactNativeWebView.postMessage('AudioContext is not created');
+                return;
+              }
+              const oscillator = context.createOscillator();
+              oscillator.type = 'sine';
+              oscillator.frequency.setValueAtTime(440, context.currentTime);
+              oscillator.connect(gainNode);
+              gainNode.connect(context.destination);
+              oscillator.start();
+              gainNode.gain.setValueAtTime(1, context.currentTime);
+              setTimeout(() => {
+                gainNode.gain.setValueAtTime(0, context.currentTime);
+              }, 1000);
+            } catch (error) {
+              window.ReactNativeWebView.postMessage('Error playing tone: ' + error.message);
+            }
+          }
+
+          window.addEventListener("message", function(event) {
+            if (event.data === 'playTone') {
+              console.log('Message received: playTone');
+              window.ReactNativeWebView.postMessage('Message received: playTone');
+              createContext();
+              playTone();
+            }
+          });
+
+          document.body.addEventListener('click', createContext); // 사용자가 클릭할 때 오디오 컨텍스트 생성
+        </script>
+      </body>
+    </html>
+  `;
+  const playTone = () => {
+    if (webviewRef.current) {
+      webviewRef.current.postMessage('playTone');
+      console.log('Message posted: playTone');
+    }
   };
 
+  const handleMessage = event => {
+    // Alert.alert('WebView message', event.nativeEvent.data);
+    // console.log('WebView message:', event.nativeEvent.data);
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
+    <View style={styles.container}>
+      {/* <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
         <Text>Tone</Text>
       </TouchableOpacity>
       <TouchableOpacity onPressIn={playDot} onPressOut={rewind}>
@@ -176,10 +225,17 @@ export default function App() {
       </TouchableOpacity>
       <TouchableOpacity onPressIn={startDash} onPressOut={stopSound}>
         <Text>Dah2</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => playMorse('... --- .../--- . ---')}>
-        <Text>Play SOS</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <WebView
+        ref={webviewRef}
+        originWhitelist={['*']}
+        source={{html: htmlContent}}
+        javaScriptEnabled={true}
+        onMessage={handleMessage}
+        mediaPlaybackRequiresUserAction={false} // 추가 설정
+        domStorageEnabled={true} // 추가 설정
+      />
+      <Button title="Play Tone" onPress={playTone} />
 
       {/* <TouchableOpacity
         onPressIn={startDash}
@@ -192,7 +248,6 @@ export default function App() {
         }}>
         <Text>Dash2</Text>
       </TouchableOpacity> */}
-      <TouchGesture />
 
       {/* <Draggable
         x={100}
@@ -216,7 +271,7 @@ export default function App() {
         isCircle
         shouldReverse
       /> */}
-    </SafeAreaView>
+    </View>
   );
 }
 
