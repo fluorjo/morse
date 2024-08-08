@@ -65,7 +65,7 @@ class TouchGesture extends React.Component<{}, StateType> {
   }
 
   render() {
-    console.log('render');
+    // console.log('render');
 
     return (
       <View style={styles.container}>
@@ -91,7 +91,7 @@ class TouchGesture extends React.Component<{}, StateType> {
   }
 
   _highlight = () => {
-    console.log('_highlight');
+    // console.log('_highlight');
 
     this.circle &&
       this.circle.setNativeProps({
@@ -100,7 +100,7 @@ class TouchGesture extends React.Component<{}, StateType> {
   };
 
   _unHighlight = () => {
-    console.log('_unHighlight');
+    // console.log('_unHighlight');
 
     this.circle &&
       this.circle.setNativeProps({
@@ -109,8 +109,8 @@ class TouchGesture extends React.Component<{}, StateType> {
   };
 
   _updatePosition = () => {
-    console.log('=====_updatePosition=====');
-    console.log(this.circle);
+    // console.log('=====_updatePosition=====');
+    // console.log(this.circle);
 
     this.circle && this.circle.setNativeProps(this._circlesStyles);
   };
@@ -137,7 +137,7 @@ class TouchGesture extends React.Component<{}, StateType> {
   };
 
   _handlePanResponderMove = (event, gestureState) => {
-    console.log('_handlePanResponderMove');
+    // console.log('_handlePanResponderMove');
 
     //터치이벤트가 진행중일 때 실행
     //여기서 screen은 터치하고자 하는 요소(circle)을 의미한다
@@ -167,10 +167,13 @@ class TouchGesture extends React.Component<{}, StateType> {
     this._circlesStyles.style.left = this._previousLeft + gestureState.dx;
     this._circlesStyles.style.top = this._previousTop + gestureState.dy;
     this._updatePosition();
+    if (gestureState.dx < -10) {
+      console.log('ok');
+    }
   };
 
   _handlePanResponderEnd = (event, gestureState) => {
-    console.log('_handlePanResponderEnd');
+    // console.log('_handlePanResponderEnd');
 
     this._unHighlight();
     this._previousLeft += gestureState.dx;
