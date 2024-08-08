@@ -76,6 +76,18 @@ export default function App() {
       });
     }
   };
+  // const playSound = () => {
+  //   console.log('before sound, playing=', playing);
+  //   if (!playing) {
+  //     setPlaying(true);
+  //     myRemoteSound.setVolume(1);
+  //     myRemoteSound.setNumberOfLoops(-1).play();
+  //     setPlaying(false);
+  //     console.log('play sound initiated');
+  //   } else {
+  //     null;
+  //   }
+  // };
   const playSound = () => {
     console.log('before sound, playing=', playing);
     if (!playing) {
@@ -119,11 +131,11 @@ export default function App() {
     myRemoteSound.setCurrentTime(1);
   };
 
-  const startDot = () => {
+  const DotInterval = () => {
     intervalRef.current = setInterval(playDot, length_of_unit + length_of_unit);
   };
 
-  const startDash = () => {
+  const DashInterval = () => {
     playDash();
     intervalRef.current = setInterval(
       playDash,
@@ -159,6 +171,10 @@ export default function App() {
     playNext();
   };
 
+  const xxxxx = () => {
+    console.log('sw');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPressIn={playSound} onPressOut={pauseSound}>
@@ -170,18 +186,18 @@ export default function App() {
       <TouchableOpacity onPressIn={playDash} onPressOut={rewind}>
         <Text>Dash</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPressIn={startDot} onPressOut={stopSound}>
-        <Text>Dot2</Text>
+      <TouchableOpacity onPressIn={DotInterval} onPressOut={stopSound}>
+        <Text>Dot Interval</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPressIn={startDash} onPressOut={stopSound}>
-        <Text>Dah2</Text>
+      <TouchableOpacity onPressIn={DashInterval} onPressOut={stopSound}>
+        <Text>Dash Interval</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => playMorse('... --- .../--- . ---')}>
         <Text>Play SOS</Text>
       </TouchableOpacity>
 
       {/* <TouchableOpacity
-        onPressIn={startDash}
+        onPressIn={repeatDash}
         onPressOut={stopSound}
         style={{
           backgroundColor: 'black',
@@ -191,7 +207,7 @@ export default function App() {
         }}>
         <Text>Dash2</Text>
       </TouchableOpacity> */}
-      <TouchGesture />
+      <TouchGesture onDxExceed={playDot} />
 
       {/* <Draggable
         x={100}
