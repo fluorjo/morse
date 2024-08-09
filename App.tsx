@@ -28,7 +28,7 @@ var WPM = 20;
 var length_of_unit = (60 / (50 * WPM)) * 1000;
 
 export default function App() {
-  const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
+  const [playing, setPlaying] = useState(false); 
   useEffect(() => {
     if (playing) {
       // console.log('playing state changed to true');
@@ -36,7 +36,7 @@ export default function App() {
       // console.log('playing state changed to false');
     }
   }, [playing]);
-  const intervalRef = useRef<any>(null); // 인터벌 참조를 저장할 ref
+  const intervalRef = useRef<any>(null); 
   const [scrollable, setScrollable] = React.useState(true);
 
   useEffect(() => {
@@ -140,11 +140,11 @@ export default function App() {
     intervalRef.current = setInterval(
       playDash,
       length_of_unit * 3 + length_of_unit,
-    ); // dot 신호의 3배 시간 간격으로 playDash 함수 반복
+    );
   };
 
   const stopSound = () => {
-    clearInterval(intervalRef.current); // 인터벌 중지
+    clearInterval(intervalRef.current);
   };
   const playMorse = sequence => {
     let index = 0;
@@ -154,10 +154,10 @@ export default function App() {
         index++;
         if (symbol === '.') {
           playDot();
-          setTimeout(playNext, length_of_unit + length_of_unit); // 60ms dot duration + 60ms space
+          setTimeout(playNext, length_of_unit + length_of_unit);
         } else if (symbol === '-') {
           playDash();
-          setTimeout(playNext, length_of_unit * 3 + length_of_unit); // 180ms dash duration + 60ms space
+          setTimeout(playNext, length_of_unit * 3 + length_of_unit);
         } else if (symbol === ' ') {
           setTimeout(playNext, length_of_unit * 3 - length_of_unit);
         } else if (symbol === '/') {
@@ -169,10 +169,6 @@ export default function App() {
       }
     };
     playNext();
-  };
-
-  const xxxxx = () => {
-    console.log('sw');
   };
 
   return (
@@ -195,42 +191,7 @@ export default function App() {
       <TouchableOpacity onPress={() => playMorse('... --- .../--- . ---')}>
         <Text>Play SOS</Text>
       </TouchableOpacity>
-
-      {/* <TouchableOpacity
-        onPressIn={repeatDash}
-        onPressOut={stopSound}
-        style={{
-          backgroundColor: 'black',
-          borderRadius: 25,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text>Dash2</Text>
-      </TouchableOpacity> */}
       <TouchGesture onDxExceed={playDot} />
-
-      {/* <Draggable
-        x={100}
-        y={300}
-        renderSize={50}
-        renderColor="black"
-        renderText="Dot"
-        isCircle
-        shouldReverse
-        // onDrag={() => console.log('drag')}
-        onDrag={playDot}
-        // onDragRelease={() => console.log('red')}
-        onDragRelease={rewind}
-      />
-      <Draggable
-        x={200}
-        y={300}
-        renderSize={50}
-        renderColor="red"
-        renderText="Dash"
-        isCircle
-        shouldReverse
-      /> */}
     </SafeAreaView>
   );
 }

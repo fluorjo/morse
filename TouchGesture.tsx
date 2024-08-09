@@ -4,6 +4,22 @@ import {Animated, PanResponder, StyleSheet, Text, View} from 'react-native';
 const TouchGesture = ({onDxExceed}) => {
   const pan = useRef(new Animated.ValueXY()).current;
   const [dxValue, setDxValue] = useState(0);
+  const intervalRef = useRef(null);
+
+  const startInterval = () => {
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        onDxExceed();
+      }, 120);
+    }
+  };
+
+  const stopInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
 
   const panResponder = useRef(
     PanResponder.create({
@@ -14,9 +30,10 @@ const TouchGesture = ({onDxExceed}) => {
         })(event, gestureState);
         setDxValue(gestureState.dx);
 
-        // dx가 일정 값 이상이 되면 onDxExceed 함수를 호출합니다.
-        if (gestureState.dx > 20 && onDxExceed) {
-          onDxExceed();
+        if (gestureState.dx > 20) {
+          startInterval();
+        } else {
+          stopInterval();
         }
       },
       onPanResponderRelease: () => {
