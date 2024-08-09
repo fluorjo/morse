@@ -1,19 +1,25 @@
 import React, {useRef, useState} from 'react';
 import {Animated, PanResponder, StyleSheet, Text, View} from 'react-native';
 
-const TouchGesture = ({onDxExceed}) => {
+const TouchGesture = ({onDxRight, onDxLeft, length_of_unit}) => {
   const pan = useRef(new Animated.ValueXY()).current;
   const [dxValue, setDxValue] = useState(0);
   const intervalRef = useRef(null);
 
-  const startInterval = () => {
+  const startDashInterval = () => {
     if (!intervalRef.current) {
       intervalRef.current = setInterval(() => {
-        onDxExceed();
-      }, 120);
+        onDxLeft();
+      }, length_of_unit * 3 + length_of_unit);
     }
   };
-
+  const startDotInterval = () => {
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        onDxRight();
+      }, length_of_unit + length_of_unit);
+    }
+  };
   const stopInterval = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -30,8 +36,10 @@ const TouchGesture = ({onDxExceed}) => {
         })(event, gestureState);
         setDxValue(gestureState.dx);
 
-        if (gestureState.dx > 20) {
-          startInterval();
+        if (gestureState.dx > 10) {
+          startDotInterval();
+        } else if (gestureState.dx < -10) {
+          startDashInterval();
         } else {
           stopInterval();
         }

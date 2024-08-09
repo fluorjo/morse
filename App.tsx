@@ -28,7 +28,7 @@ var WPM = 20;
 var length_of_unit = (60 / (50 * WPM)) * 1000;
 
 export default function App() {
-  const [playing, setPlaying] = useState(false); 
+  const [playing, setPlaying] = useState(false);
   useEffect(() => {
     if (playing) {
       // console.log('playing state changed to true');
@@ -36,7 +36,7 @@ export default function App() {
       // console.log('playing state changed to false');
     }
   }, [playing]);
-  const intervalRef = useRef<any>(null); 
+  const intervalRef = useRef<any>(null);
   const [scrollable, setScrollable] = React.useState(true);
 
   useEffect(() => {
@@ -191,7 +191,11 @@ export default function App() {
       <TouchableOpacity onPress={() => playMorse('... --- .../--- . ---')}>
         <Text>Play SOS</Text>
       </TouchableOpacity>
-      <TouchGesture onDxExceed={playDot} />
+      <TouchGesture
+        onDxRight={playDot}
+        onDxLeft={playDash}
+        length_of_unit={length_of_unit}
+      />
     </SafeAreaView>
   );
 }
