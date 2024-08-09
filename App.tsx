@@ -31,9 +31,9 @@ export default function App() {
   const [playing, setPlaying] = useState(false); // 초기값을 false로 설정
   useEffect(() => {
     if (playing) {
-      console.log('playing state changed to true');
+      // console.log('playing state changed to true');
     } else {
-      console.log('playing state changed to false');
+      // console.log('playing state changed to false');
     }
   }, [playing]);
   const intervalRef = useRef<any>(null); // 인터벌 참조를 저장할 ref
@@ -45,12 +45,12 @@ export default function App() {
         console.log('failed to load the sound', error);
         return;
       } else {
-        console.log(
-          'duration in seconds: ' +
-            myRemoteSound.getDuration() +
-            'number of channels: ' +
-            myRemoteSound.getNumberOfChannels(),
-        );
+        // console.log(
+        //   'duration in seconds: ' +
+        //     myRemoteSound.getDuration() +
+        //     'number of channels: ' +
+        //     myRemoteSound.getNumberOfChannels(),
+        // );
       }
     });
     myRemoteSound.setVolume(1);
@@ -67,10 +67,10 @@ export default function App() {
       myRemoteSound.play(success => {
         if (success) {
           setPlaying(false);
-          console.log('Sound playing');
+          // console.log('Sound playing');
         } else {
           setPlaying(false);
-          console.log('Issue playing file');
+          // console.log('Issue playing file');
           console.log(Error);
         }
       });
@@ -89,24 +89,24 @@ export default function App() {
   //   }
   // };
   const playSound = () => {
-    console.log('before sound, playing=', playing);
+    // console.log('before sound, playing=', playing);
     if (!playing) {
       setPlaying(true);
       myRemoteSound.setVolume(1);
       myRemoteSound.setNumberOfLoops(-1).play();
       setPlaying(false);
-      console.log('play sound initiated');
+      // console.log('play sound initiated');
     } else {
       null;
     }
   };
   const pauseSound = () => {
-    console.log('before stop, playing=', playing);
+    // console.log('before stop, playing=', playing);
 
     if (!playing) {
       myRemoteSound.setVolume(0);
       setPlaying(false);
-      console.log('stop sound, playing=', playing);
+      // console.log('stop sound, playing=', playing);
     } else {
       null;
     }
