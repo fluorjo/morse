@@ -66,9 +66,12 @@ const TouchGesture = ({onDxRight, onDxLeft, length_of_unit}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.5,
+    width: 400,
+    height: 600,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'red',
   },
   titleText: {
     fontSize: 14,

@@ -1,4 +1,4 @@
-package com.morse
+package com.morse_rn
 
 import android.app.Application
 import com.facebook.react.PackageList

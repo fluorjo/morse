@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface morseTests : XCTestCase
+@interface morse_rnTests : XCTestCase
 
 @end
 
-@implementation morseTests
+@implementation morse_rnTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
